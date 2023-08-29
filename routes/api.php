@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 //auth
 Route::post('adduser', [UserController::class, 'storeUser']);
 Route::post('login', [UserController::class, 'login']);
-
+// done
 
 Route::post('pesanan', [PesananController::class, 'store']);
 Route::get('pesanan/{id}', [PesananController::class, 'many']);

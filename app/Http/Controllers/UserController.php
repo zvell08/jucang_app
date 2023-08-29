@@ -11,8 +11,8 @@ class UserController extends Controller
     public function storeUser(Request $request)
     {
         $data = [
-            'no_tlp' => $request->no_tlp,
             'name' => $request->name,
+            'no_tlp' => $request->no_tlp,
             'tipe' => $request->tipe,
             'password' => bcrypt($request->password),
             'user_id' => auth()->id()

@@ -32,6 +32,7 @@ class PesananController extends Controller
 
     function many(User $user)
     {
-        return response()->json($user->pesanans()->with('produks')->get()->groupBy('status'));
+        // return response()->json($user->pesanans()->with('produks')->get()->groupBy('status'));
+        return $user->pesanans()->with('produks')->get()->groupBy('status');
     }
 }

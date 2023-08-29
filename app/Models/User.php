@@ -17,6 +17,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Pesanan::class);
     }
+    protected $guarded = [
+        'id',
+    ];
+
 
     /**
      * The attributes that are mass assignable.
@@ -25,8 +29,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'tipe',
         'password',
+        'no_tlp',
     ];
 
     /**
