@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 
 class PesananController extends Controller
 {
-    function store(Request $request)
+    function store(Request $request, User $user)
     {
-        $user = User::find($request->user_id);
+        // return $user;
+        // $user = User::find($request->user_id);
+        // return $user;
 
         $pesanan = $user->pesanans()->create([
             'nama_toko' => $request->nama_toko,
@@ -35,4 +37,5 @@ class PesananController extends Controller
         // return response()->json($user->pesanans()->with('produks')->get()->groupBy('status'));
         return $user->pesanans()->with('produks')->get()->groupBy('status');
     }
+
 }

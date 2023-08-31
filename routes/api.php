@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PesananController;
+use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,5 +26,7 @@ Route::post('adduser', [UserController::class, 'storeUser']);
 Route::post('login', [UserController::class, 'login']);
 // done
 
-Route::post('pesanan', [PesananController::class, 'store']);
-Route::get('pesanan/{id}', [PesananController::class, 'many']);
+Route::post('pesanan/{user}', [PesananController::class, 'store']);
+Route::get('mesen/{user}', [PesananController::class, 'many']);
+
+Route::get('all', [ProdukController::class, 'index']);
