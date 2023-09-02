@@ -41,4 +41,12 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Invalid login credentials'], 401);
     }
+
+    public function getUser(Request $request)
+    {
+        $data = User::all()->groupBy('tipe')->toArray();
+
+        return response()->json($data);
+
+    }
 }

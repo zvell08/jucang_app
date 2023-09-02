@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pesanan;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -34,8 +35,20 @@ class PesananController extends Controller
 
     function many(User $user)
     {
-        // return response()->json($user->pesanans()->with('produks')->get()->groupBy('status'));
-        return $user->pesanans()->with('produks')->get()->groupBy('status');
+        return response()->json($user->pesanans()->with('produks')->get()->groupBy('status'));
+        // return $user->pesanans()->with('produks')->get()->groupBy('status');
+    }
+
+    public function update(Request $request, $pesanan)
+    {
+        $pesanans = Pesanan::find($pesanan);
+        $pesanans->return = $request->input('return');
+        $pesanans->terjual = $request->input('terjual');
+        $pesanans->sample = $request->input('sample');
+        $pesanans->status = $request->input('status');
+        $pesanans->save();
+
+        return response()->json('berhasil');
     }
 
 }

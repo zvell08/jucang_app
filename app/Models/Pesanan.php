@@ -15,7 +15,7 @@ class Pesanan extends Model
     protected function status(): Attribute
     {
         return Attribute::make(
-            get: fn(string $value) => $value == 1 ? 'lunas' : 'hutang',
+            get: fn(string $value) => $value == 1 ? 'Lunas' : 'Hutang',
         );
     }
 

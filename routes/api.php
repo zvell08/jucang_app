@@ -24,9 +24,11 @@ use Illuminate\Support\Facades\Route;
 //auth
 Route::post('adduser', [UserController::class, 'storeUser']);
 Route::post('login', [UserController::class, 'login']);
+Route::get('sales', [UserController::class, 'getUser']);
 // done
+//sales
+Route::post('mesan/{user}', [PesananController::class, 'store']);
+Route::get('pesanan/{user}', [PesananController::class, 'many']);
+Route::post('update/{pesanan}', [PesananController::class, 'update']);
 
-Route::post('pesanan/{user}', [PesananController::class, 'store']);
-Route::get('mesen/{user}', [PesananController::class, 'many']);
-
-Route::get('all', [ProdukController::class, 'index']);
+Route::get('produk', [ProdukController::class, 'index']);
