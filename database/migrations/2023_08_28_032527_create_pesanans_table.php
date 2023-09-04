@@ -13,7 +13,7 @@ return new class extends Migration {
     {
         Schema::create('pesanans', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained()->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(User::class)->constrained();
             $table->string('nama_toko');
             $table->string('alamat_toko');
             $table->date('tanggal');
@@ -24,6 +24,7 @@ return new class extends Migration {
             $table->timestamps();
         });
     }
+    // ->restrictOnDelete()->cascadeOnUpdate()
 
     /**
      * Reverse the migrations.

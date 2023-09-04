@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pesanan;
+use App\Models\Pesananproduk;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class PesananController extends Controller
         // return $user;
         // $user = User::find($request->user_id);
         // return $user;
-
+        // return $request->produk_id;
         $pesanan = $user->pesanans()->create([
             'nama_toko' => $request->nama_toko,
             'alamat_toko' => $request->alamat_toko,
@@ -25,7 +26,7 @@ class PesananController extends Controller
 
         ]);
 
-        $pesanan->produks()->sync($request->produk_id);
+        $pesanan->produks()->attach($request->produk_id);
 
         $data = $pesanan->load('produks');
 
@@ -50,5 +51,15 @@ class PesananController extends Controller
 
         return response()->json('berhasil');
     }
+
+    public function delete(Request $request, $pesanan)
+    {
+        $data = Pesanan::find($pesanan);
+        $data->delete();
+        return response()->json("berhasil");
+    }
+
+
+
 
 }

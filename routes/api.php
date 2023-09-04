@@ -30,5 +30,6 @@ Route::get('sales', [UserController::class, 'getUser']);
 Route::post('mesan/{user}', [PesananController::class, 'store']);
 Route::get('pesanan/{user}', [PesananController::class, 'many']);
 Route::post('update/{pesanan}', [PesananController::class, 'update']);
+Route::post('delete/{pesanan}', [PesananController::class, 'delete']);
 
 Route::get('produk', [ProdukController::class, 'index']);

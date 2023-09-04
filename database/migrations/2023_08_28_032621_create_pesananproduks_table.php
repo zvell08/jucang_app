@@ -14,11 +14,11 @@ return new class extends Migration {
     {
         Schema::create('pesanan_produk', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Pesanan::class)->constrained();
-            $table->foreignIdFor(Produk::class)->constrained();
+            $table->foreignIdFor(Pesanan::class);
+            $table->foreignIdFor(Produk::class);
         });
     }
-
+    // ->constrained()
     /**
      * Reverse the migrations.
      */
