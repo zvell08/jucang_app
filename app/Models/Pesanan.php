@@ -12,6 +12,7 @@ class Pesanan extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+
     protected function status(): Attribute
     {
         return Attribute::make(

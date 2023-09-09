@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Pesanan::class);
             $table->foreignIdFor(Produk::class);
+            $table->integer('amount');
         });
     }
     // ->constrained()
