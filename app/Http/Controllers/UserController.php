@@ -30,16 +30,31 @@ class UserController extends Controller
     }
     public function login(Request $request)
     {
-        $credentials = $request->only('name', 'password');
+        // $credentials = $request->only('name', 'password');
 
-        if (Auth::attempt($credentials)) {
+        // if (Auth::attempt($credentials)) {
+        //     $user = Auth::user();
+        //     $token = $user->createToken('MyApp')->plainTextToken;
+
+        //     return response()->json(['token' => $token, 'user' => $user]);
+        // }
+
+        // return response()->json(['message' => 'Invalid login credentials'], 401);
+
+        try {
+            $credentials = $request->only('name', 'password');
+
+            if (!Auth::attempt($credentials)) {
+                throw new \Exception('Invalid login credentials');
+            }
+
             $user = Auth::user();
             $token = $user->createToken('MyApp')->plainTextToken;
 
             return response()->json(['token' => $token, 'user' => $user]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 401);
         }
-
-        return response()->json(['message' => 'Invalid login credentials'], 401);
     }
 
     public function getUser(Request $request)
