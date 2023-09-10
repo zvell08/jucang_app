@@ -35,7 +35,7 @@ Route::middleware('auth:sanctum')->controller(UserController::class)->prefix('ow
 Route::middleware('auth:sanctum')->controller(PesananController::class)->prefix('sales')->group(function () {
     Route::post('mesan/{user}', 'store');
     Route::post('update/{pesanan}', 'update');
-    Route::post('dalate/{pesanan}', 'dalete');
+    Route::post('delete/{pesanan}', 'dalete');
     Route::get('pesanan/{user}', 'many');
 
 });
