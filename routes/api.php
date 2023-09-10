@@ -24,12 +24,15 @@ use Illuminate\Support\Facades\Route;
 //auth
 Route::post('adduser', [UserController::class, 'storeUser']);
 Route::post('login', [UserController::class, 'login']);
-Route::get('sales', [UserController::class, 'getUser']);
-// done
-//sales
-Route::post('mesan/{user}', [PesananController::class, 'store']);
-Route::get('pesanan/{user}', [PesananController::class, 'many']);
-Route::post('update/{pesanan}', [PesananController::class, 'update']);
-Route::post('delete/{pesanan}', [PesananController::class, 'delete']);
 
 Route::get('produk', [ProdukController::class, 'index']);
+
+Route::middleware('auth:sanctum')->controller(UserController::class)->prefix('owner')->group(function () {
+    Route::get('/', 'getUser');
+});
+Route::middleware('auth:sanctum')->controller(PesananController::class)->prefix('sales')->group(function () {
+    Route::post('mesan/{user}', 'store');
+    Route::post('update/{pesanan}', 'update');
+    Route::post('dalate/{pesanan}', 'dalete');
+    Route::get('pesanan/{user}', 'many');
+});

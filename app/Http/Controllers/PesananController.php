@@ -84,16 +84,16 @@ class PesananController extends Controller
         // return response()->json($groupedPesanan);
         //beda
         // Ambil pesanan dengan produk terkait
-        $pesanans = $user->pesanans()->with([
-            'produks' => function ($query) {
-                $query->select('produks.id', 'produks.nama_produk', 'pesanan_produk.amount');
-            }
-        ])->get();
+        try {
+            $groupedPesanan = $user->pesanans()
+                ->with(['produks:id,nama_produk,pesanan_produk.amount'])
+                ->get()
+                ->groupBy('status');
 
-        // Kelompokkan pesanan berdasarkan status
-        $groupedPesanan = $pesanans->groupBy('status');
-
-        return response()->json($groupedPesanan);
+            return response()->json($groupedPesanan);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function update(Request $request, $pesanan)
@@ -146,34 +146,61 @@ class PesananController extends Controller
         // foreach ($dataFromJson['dataProduk'] as $produkId => $amount) {
         //     $dataToSync[$produkId] = ['amount' => $amount];
         // }
+        //beda atasnya aja (foreach sama collect)
 
-        $dataToSync = collect($request->dataProduk)
-            // ->filter(fun)
-            ->map(fn($value) => ['amount' => $value]);
+        // $dataToSync = collect($request->dataProduk)
+        //     // ->filter(fun)
+        //     ->map(fn($value) => ['amount' => $value]);
 
 
-        // return $dataToSync->toArray();
+        // // return $dataToSync->toArray();
 
-        $pesanan = $user->pesanans()->create([
-            'nama_toko' => $request->nama_toko,
-            'alamat_toko' => $request->alamat_toko,
-            'tanggal' => $request->tanggal,
-            'status' => $request->status,
-            'return' => $request->return,
-            'terjual' => $request->terjual,
-            'sample' => $request->sample
-        ]);
+        // $pesanan = $user->pesanans()->create([
+        //     'nama_toko' => $request->nama_toko,
+        //     'alamat_toko' => $request->alamat_toko,
+        //     'tanggal' => $request->tanggal,
+        //     'status' => $request->status,
+        //     'return' => $request->return,
+        //     'terjual' => $request->terjual,
+        //     'sample' => $request->sample
+        // ]);
 
-        // Melakukan sync dengan data yang sudah disiapkan
-        $pesanan->produks()->sync($dataToSync);
+        // // Melakukan sync dengan data yang sudah disiapkan
+        // $pesanan->produks()->sync($dataToSync);
 
-        $data = $pesanan->load([
-            'produks' => function ($query) {
-                $query->select('produks.id', 'produks.nama_produk', 'pesanan_produk.amount');
-            }
-        ]);
+        // $data = $pesanan->load([
+        //     'produks' => function ($query) {
+        //         $query->select('produks.id', 'produks.nama_produk', 'pesanan_produk.amount');
+        //     }
+        // ]);
 
-        return response()->json($data);
+        // return response()->json($data);
+        try {
+            $pesanan = $user->pesanans()->create($request->only([
+                'nama_toko',
+                'alamat_toko',
+                'tanggal',
+                'status',
+                'return',
+                'terjual',
+                'sample'
+            ]));
+
+            $dataToSync = collect($request->dataProduk)
+                ->map(fn($value) => ['amount' => $value]);
+
+            $pesanan->produks()->sync($dataToSync);
+
+            $data = $pesanan->load([
+                'produks' => function ($query) {
+                    $query->select('produks.id', 'produks.nama_produk', 'pesanan_produk.amount');
+                }
+            ]);
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
 
