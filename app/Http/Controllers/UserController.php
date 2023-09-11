@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pesanan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,5 +64,13 @@ class UserController extends Controller
 
         return response()->json($data);
 
+    }
+
+    public function all()
+    {
+        // Mengambil semua pesanan dari database
+        $pesanan = Pesanan::with(['produks:id,nama_produk,pesanan_produk.amount'])->get()->groupBy('status'); // Pastikan model memiliki relasi dengan produk jika diperlukan
+
+        return response()->json($pesanan);
     }
 }

@@ -203,13 +203,7 @@ class PesananController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    public function all()
-    {
-        // Mengambil semua pesanan dari database
-        $pesanan = Pesanan::with(['produks:id,nama_produk,pesanan_produk.amount'])->get()->groupBy('status'); // Pastikan model memiliki relasi dengan produk jika diperlukan
 
-        return response()->json($pesanan);
-    }
 
 
     // function store(Request $request, User $user)
