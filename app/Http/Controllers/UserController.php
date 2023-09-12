@@ -69,7 +69,9 @@ class UserController extends Controller
     public function all()
     {
         // Mengambil semua pesanan dari database
-        $pesanan = Pesanan::with(['produks:id,nama_produk,pesanan_produk.amount'])->get()->groupBy('status'); // Pastikan model memiliki relasi dengan produk jika diperlukan
+        $pesanan = Pesanan::with(['produks:id,nama_produk,pesanan_produk.amount'])
+        ->get()
+        ->groupBy('status'); // Pastikan model memiliki relasi dengan produk jika diperlukan
 
         return response()->json($pesanan);
     }
