@@ -29,6 +29,33 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    public function storeUserByWeb(Request $request)
+    {
+        $request->validate([
+            'tipe' => 'required|in:A,S',
+
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'no_tlp' => $request->no_tlp,
+            'tipe' => $request->tipe,
+            'password' => bcrypt($request->password),
+        ];
+
+        try {
+            $user = User::create($data);
+            return redirect()->route('user.create')->with('success', 'Pengguna berhasil ditambahkan');
+        } catch (\Throwable $th) {
+            // dd($th->getMessage()); // Tampilkan pesan kesalahan database
+            return back()->with('error', 'Gagal menambahkan pengguna: ' . $th->getMessage());
+        }
+    }
+    public function create()
+    {
+        return view('layout.layout');
+    }
     public function login(Request $request)
     {
         // $credentials = $request->only('name', 'password');
@@ -70,8 +97,8 @@ class UserController extends Controller
     {
         // Mengambil semua pesanan dari database
         $pesanan = Pesanan::with(['produks:id,nama_produk,pesanan_produk.amount'])
-        ->get()
-        ->groupBy('status'); // Pastikan model memiliki relasi dengan produk jika diperlukan
+            ->get()
+            ->groupBy('status'); // Pastikan model memiliki relasi dengan produk jika diperlukan
 
         return response()->json($pesanan);
     }
