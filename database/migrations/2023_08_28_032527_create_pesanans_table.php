@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->integer('terjual')->nullable();
             $table->integer('sample')->nullable();
             $table->boolean('status')->default(0);
+            $table->integer('total_harga')->default(0)->nullable();
             $table->timestamps();
         });
     }

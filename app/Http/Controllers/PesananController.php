@@ -184,7 +184,8 @@ class PesananController extends Controller
                 'status',
                 'return',
                 'terjual',
-                'sample'
+                'sample',
+                'total_harga'
             ]));
 
             $dataToSync = collect($request->dataProduk)
