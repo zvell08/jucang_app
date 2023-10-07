@@ -29,7 +29,7 @@ class PesananController extends Controller
     public function update(Request $request, Pesanan $pesanan)
     {
         try {
-            // Update data pada tabel pesanans
+
             $dataPesanan = $request->only([
                 'nama_toko',
                 'alamat_toko',
@@ -39,7 +39,7 @@ class PesananController extends Controller
                 'sample',
             ]);
 
-            // Hitung ulang total harga berdasarkan produk yang dipilih
+
             $totalHarga = 0;
             foreach ($request->dataProduk as $produkId => $amount) {
                 $produk = Produk::find($produkId);
@@ -50,17 +50,14 @@ class PesananController extends Controller
 
             $dataPesanan['total_harga'] = $totalHarga;
 
-            // Update data pada tabel pesanans
+
             $pesanan->update($dataPesanan);
 
-            // Data produk baru yang akan disinkronkan
             $dataToSync = collect($request->dataProduk)
                 ->map(fn($value) => ['amount' => $value]);
 
-            // Update data pada tabel pesanan_produk
             $pesanan->produks()->sync($dataToSync);
 
-            // Muat data terbaru
             $data = $pesanan->load([
                 'produks' => function ($query) {
                     $query->select('produks.id', 'produks.nama_produk', 'pesanan_produk.amount');
@@ -78,10 +75,8 @@ class PesananController extends Controller
     public function delete(Pesanan $pesanan)
     {
         try {
-            // Hapus data dari tabel pesanan_produk yang terkait dengan pesanan
             $pesanan->produks()->detach();
 
-            // Hapus data pesanan
             $pesanan->delete();
 
             return response()->json(['message' => 'Pesanan berhasil dihapus'], 200);
@@ -93,7 +88,6 @@ class PesananController extends Controller
     function store(Request $request, User $user)
     {
         try {
-            // Menyiapkan data pesanan
             $dataPesanan = $request->only([
                 'nama_toko',
                 'alamat_toko',
@@ -104,7 +98,6 @@ class PesananController extends Controller
                 'sample',
             ]);
 
-            // Hitung total harga berdasarkan produk yang dipilih
             $totalHarga = 0;
             foreach ($request->dataProduk as $produkId => $amount) {
                 $produk = Produk::find($produkId);
@@ -115,16 +108,13 @@ class PesananController extends Controller
 
             $dataPesanan['total_harga'] = $totalHarga;
 
-            // Buat pesanan
             $pesanan = $user->pesanans()->create($dataPesanan);
 
-            // Buat data pesanan_produk
             $dataToSync = collect($request->dataProduk)
                 ->map(fn($value) => ['amount' => $value]);
 
             $pesanan->produks()->sync($dataToSync);
 
-            // Muat data terbaru
             $data = $pesanan->load([
                 'produks' => function ($query) {
                     $query->select('produks.id', 'produks.nama_produk', 'pesanan_produk.amount');

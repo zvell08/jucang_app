@@ -48,7 +48,6 @@ class UserController extends Controller
             $user = User::create($data);
             return redirect()->route('user.create')->with('success', 'Pengguna berhasil ditambahkan');
         } catch (\Throwable $th) {
-            // dd($th->getMessage()); // Tampilkan pesan kesalahan database
             return back()->with('error', 'Gagal menambahkan pengguna: ' . $th->getMessage());
         }
     }
@@ -93,14 +92,12 @@ class UserController extends Controller
 
     public function byMounth(Request $request)
     {
-        $month = $request->input('month'); // Ambil bulan dari input request (tidak ada nilai default)
+        $month = $request->input('month');
 
-        // Validasi input bulan
         if (!in_array($month, range(1, 12))) {
             return response()->json(['error' => 'Bulan yang dimasukkan tidak valid.'], 400);
         }
 
-        // Filter pesanan berdasarkan bulan
         $recap = Pesanan::with(['user:id,name', 'produks:id,nama_produk'])
             ->whereMonth('tanggal', $month)
             ->orderBy('tanggal', 'asc')
