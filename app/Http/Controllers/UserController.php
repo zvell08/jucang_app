@@ -58,16 +58,6 @@ class UserController extends Controller
     }
     public function login(Request $request)
     {
-        // $credentials = $request->only('name', 'password');
-
-        // if (Auth::attempt($credentials)) {
-        //     $user = Auth::user();
-        //     $token = $user->createToken('MyApp')->plainTextToken;
-
-        //     return response()->json(['token' => $token, 'user' => $user]);
-        // }
-
-        // return response()->json(['message' => 'Invalid login credentials'], 401);
 
         try {
             $credentials = $request->only('name', 'password');
@@ -87,7 +77,7 @@ class UserController extends Controller
 
     public function getUser(Request $request)
     {
-        $data = User::all()->groupBy('tipe')->toArray();
+        $data = User::where('tipe', 'S')->get()->toArray();
 
         return response()->json($data);
 
@@ -95,11 +85,27 @@ class UserController extends Controller
 
     public function all()
     {
-        // Mengambil semua pesanan dari database
-        $pesanan = Pesanan::with(['produks:id,nama_produk,pesanan_produk.amount'])
-            ->get()
-            ->groupBy('status'); // Pastikan model memiliki relasi dengan produk jika diperlukan
 
-        return response()->json($pesanan);
+        $recap = Pesanan::with(['user:id,name', 'produks:id,nama_produk'])->orderBy('tanggal', 'asc')->get();
+
+        return response()->json($recap);
+    }
+
+    public function byMounth(Request $request)
+    {
+        $month = $request->input('month'); // Ambil bulan dari input request (tidak ada nilai default)
+
+        // Validasi input bulan
+        if (!in_array($month, range(1, 12))) {
+            return response()->json(['error' => 'Bulan yang dimasukkan tidak valid.'], 400);
+        }
+
+        // Filter pesanan berdasarkan bulan
+        $recap = Pesanan::with(['user:id,name', 'produks:id,nama_produk'])
+            ->whereMonth('tanggal', $month)
+            ->orderBy('tanggal', 'asc')
+            ->get();
+
+        return response()->json($recap);
     }
 }

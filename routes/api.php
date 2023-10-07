@@ -30,12 +30,13 @@ Route::get('produk', [ProdukController::class, 'index']);
 Route::middleware('auth:sanctum')->controller(UserController::class)->prefix('owner')->group(function () {
     Route::get('/', 'getUser');
     Route::get('all', 'all');
+    Route::post('month', 'byMounth');
 
 });
 Route::middleware('auth:sanctum')->controller(PesananController::class)->prefix('sales')->group(function () {
     Route::post('mesan/{user}', 'store');
     Route::post('update/{pesanan}', 'update');
-    Route::post('delete/{pesanan}', 'dalete');
+    Route::post('delete/{pesanan}', 'delete');
     Route::get('pesanan/{user}', 'many');
 
 });
