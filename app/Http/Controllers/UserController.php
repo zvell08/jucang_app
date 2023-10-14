@@ -84,9 +84,9 @@ class UserController extends Controller
 
     public function getRecap(Request $request)
     {
-        $month = $request->input('month', 0); // Jika bulan tidak ada, maka default ke 0
+        $month = $request->input('month'); // Jika bulan tidak ada, maka default ke 0
 
-        if ($month === 0) {
+        if ($month == 0) {
             // Ambil semua data
             $recap = Pesanan::with(['user:id,name', 'produks:id,nama_produk,pesanan_produk.amount'])
                 ->orderBy('tanggal', 'asc')
