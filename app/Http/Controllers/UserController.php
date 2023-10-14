@@ -82,26 +82,25 @@ class UserController extends Controller
 
     }
 
-    public function all()
+    public function getRecap(Request $request)
     {
+        $month = $request->input('month', 0); // Jika bulan tidak ada, maka default ke 0
 
-        $recap = Pesanan::with(['user:id,name', 'produks:id,nama_produk'])->orderBy('tanggal', 'asc')->get();
-
-        return response()->json($recap);
-    }
-
-    public function byMounth(Request $request)
-    {
-        $month = $request->input('month');
-
-        if (!in_array($month, range(1, 12))) {
+        if ($month === 0) {
+            // Ambil semua data
+            $recap = Pesanan::with(['user:id,name', 'produks:id,nama_produk,pesanan_produk.amount'])
+                ->orderBy('tanggal', 'asc')
+                ->get();
+        } elseif (in_array($month, range(1, 12))) {
+            // Ambil data berdasarkan bulan
+            $recap = Pesanan::with(['user:id,name', 'produks:id,nama_produk,pesanan_produk.amount'])
+                ->whereMonth('tanggal', $month)
+                ->orderBy('tanggal', 'asc')
+                ->get();
+        } else {
+            // Jika bulan tidak valid
             return response()->json(['error' => 'Bulan yang dimasukkan tidak valid.'], 400);
         }
-
-        $recap = Pesanan::with(['user:id,name', 'produks:id,nama_produk'])
-            ->whereMonth('tanggal', $month)
-            ->orderBy('tanggal', 'asc')
-            ->get();
 
         return response()->json($recap);
     }

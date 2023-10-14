@@ -17,9 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 
 //auth
 Route::post('adduser', [UserController::class, 'storeUser']);
@@ -30,7 +27,7 @@ Route::get('produk', [ProdukController::class, 'index']);
 Route::middleware('auth:sanctum')->controller(UserController::class)->prefix('owner')->group(function () {
     Route::get('/', 'getUser');
     Route::get('all', 'all');
-    Route::post('month', 'byMounth');
+    Route::post('recap', 'getRecap');
 
 });
 Route::middleware('auth:sanctum')->controller(PesananController::class)->prefix('sales')->group(function () {
@@ -40,3 +37,11 @@ Route::middleware('auth:sanctum')->controller(PesananController::class)->prefix(
     Route::get('pesanan/{user}', 'many');
 
 });
+
+// Route::middleware(['auth:sanctum', 'checkRole:S'])->controller(UserController::class)->prefix('sales')->group(function () {
+
+// });
+
+// Route::middleware(['auth:sanctum', 'checkRole:A'])->controller(UserController::class)->prefix('admin')->group(function () {
+
+// });

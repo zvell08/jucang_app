@@ -31,12 +31,10 @@ class PesananController extends Controller
         try {
 
             $dataPesanan = $request->only([
-                'nama_toko',
-                'alamat_toko',
-                'tanggal',
                 'return',
                 'terjual',
                 'sample',
+                'status',
             ]);
 
 
